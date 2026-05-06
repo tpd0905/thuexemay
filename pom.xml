@@ -7,7 +7,7 @@
   <groupId>com.thuexe</groupId>
   <artifactId>thuexemay</artifactId>
   <version>1.0</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
   <name>thuexemay Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
@@ -76,6 +76,25 @@
     <version>2.10.1</version>
 </dependency>
 
+<!-- Embedded Tomcat for standalone WAR execution -->
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-core</artifactId>
+    <version>9.0.70</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-jasper</artifactId>
+    <version>9.0.70</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-logging-juli</artifactId>
+    <version>9.0.70</version>
+</dependency>
+
 </dependencies>
 
   <build>
@@ -110,6 +129,45 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.2</version>
+        </plugin>
+        <!-- JAR plugin with main class -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>servlet.TomcatStarter</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        <!-- Assembly plugin to create fat JAR -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.6.0</version>
+          <configuration>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <archive>
+              <manifest>
+                <mainClass>servlet.TomcatStarter</mainClass>
+              </manifest>
+            </archive>
+            <finalName>thuexemay</finalName>
+            <appendAssemblyId>false</appendAssemblyId>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
