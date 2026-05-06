@@ -89,12 +89,6 @@
     <version>9.0.70</version>
 </dependency>
 
-<dependency>
-    <groupId>org.apache.tomcat.embed</groupId>
-    <artifactId>tomcat-embed-logging-juli</artifactId>
-    <version>9.0.70</version>
-</dependency>
-
 </dependencies>
 
   <build>
