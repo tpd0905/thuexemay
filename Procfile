@@ -1,1 +1,1 @@
-web: java $JAVA_TOOL_OPTIONS -cp target/classes:target/dependency/* servlet.TomcatStarter
+web: java -Dfile.encoding=UTF-8 $JAVA_TOOL_OPTIONS -jar target/thuexemay.jar

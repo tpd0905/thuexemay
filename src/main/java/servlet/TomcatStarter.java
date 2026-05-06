@@ -2,8 +2,6 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
@@ -21,24 +19,37 @@ public class TomcatStarter {
         int port = portStr != null ? Integer.parseInt(portStr) : 8080;
         
         System.out.println("Starting Embedded Tomcat on port " + port);
+        System.out.flush();
         
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(port);
-        tomcat.setBaseDir(new File("target/tomcat").getAbsolutePath());
         
-        // Get application base directory
-        String appBase = new File("target").getAbsolutePath();
+        // Set base directory
+        String baseDir = System.getProperty("java.io.tmpdir");
+        tomcat.setBaseDir(baseDir);
         
-        // Add context - deploy root at "/"
+        // Get the webapp directory (should be in classpath)
+        String appBase = new File(".").getAbsolutePath();
+        
+        // Add the webapp context at root path
         Context context = tomcat.addWebapp("", appBase);
-        context.setPath("");
+        if (context == null) {
+            throw new RuntimeException("Failed to add webapp context");
+        }
         
-        // Start Tomcat
-        tomcat.start();
-        System.out.println("Tomcat started successfully!");
-        System.out.println("Application running at http://localhost:" + port);
-        
-        // Keep running
-        tomcat.getServer().await();
+        try {
+            // Start Tomcat
+            tomcat.start();
+            System.out.println("✓ Tomcat started successfully!");
+            System.out.println("✓ Application running at http://localhost:" + port);
+            System.out.flush();
+            
+            // Keep running
+            tomcat.getServer().await();
+        } catch (Exception e) {
+            System.err.println("✗ Error starting Tomcat: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }
