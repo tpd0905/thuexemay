@@ -1,0 +1,4 @@
+{
+  "buildCommand": "mvn clean package -DskipTests",
+  "startCommand": "java -Dfile.encoding=UTF-8 -jar target/thuexemay.war"
+}
